@@ -1,0 +1,46 @@
+body {
+  font-size: 18px; /* Increase base font size */
+  line-height: 1.6;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+  margin: 0 auto; /* Center the container */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px; /* Increase font size for the heading */
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 18px; /* Increase font size for labels */
+}
+
+input[type="number"] {
+  width: calc(100% - 20px); /* Adjust width to account for margin */
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 20px; /* Add spacing to the right */
+  font-size: 18px; /* Increase font size for input fields */
+}
+
+.result {
+  text-align: center;
+  font-size: 18px; /* Increase font size for result text */
+}
+
+.result p {
+  margin: 5px 0;
+}
