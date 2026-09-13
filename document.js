@@ -1,3 +1,5 @@
+import { calculateDose } from "./calculator.js";
+
 document.addEventListener("DOMContentLoaded", () => {
   const concentrationInput = document.getElementById("concentration");
   const weightConcentrationInput = document.getElementById(
@@ -7,26 +9,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultAmount = document.getElementById("result-amount");
 
   function calculate() {
-    const concentration = parseFloat(concentrationInput.value);
-    const weightConcentration = parseFloat(weightConcentrationInput.value);
-    const patientWeight = parseFloat(patientWeightInput.value);
+    const amount = calculateDose(
+      parseFloat(concentrationInput.value),
+      parseFloat(weightConcentrationInput.value),
+      parseFloat(patientWeightInput.value)
+    );
 
-    if (
-      !isNaN(concentration) &&
-      !isNaN(weightConcentration) &&
-      !isNaN(patientWeight) &&
-      concentration > 0 &&
-      weightConcentration > 0 &&
-      patientWeight > 0
-    ) {
-      const amount = (
-        (weightConcentration * patientWeight) /
-        concentration
-      ).toFixed(2);
-      resultAmount.textContent = `Benötigte Medikamentenmenge: ${amount} ml`;
-    } else {
-      resultAmount.textContent = "Benötigte Medikamentenmenge: ";
-    }
+    resultAmount.textContent =
+      amount === null
+        ? "Benötigte Medikamentenmenge: "
+        : `Benötigte Medikamentenmenge: ${amount.toFixed(2)} ml`;
   }
 
   concentrationInput.addEventListener("input", calculate);
