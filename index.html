@@ -10,21 +10,31 @@
     <div class="container">
       <h1>Medikamenten-Dosis-Rechner</h1>
       <label for="concentration">Konzentration (mg/ml):</label>
-      <input type="number" id="concentration" name="concentration" />
+      <input type="number" id="concentration" name="concentration" min="0" step="any" />
 
       <label for="weight-concentration">Gewichtskonzentration (mg/kg):</label>
       <input
         type="number"
         id="weight-concentration"
         name="weight-concentration"
+        min="0"
+        step="any"
       />
 
       <label for="patient-weight">Gewicht Patient (kg):</label>
-      <input type="number" id="patient-weight" name="patient-weight" />
+      <input type="number" id="patient-weight" name="patient-weight" min="0" step="any" />
 
       <div class="result">
         <p id="result-amount">Benötigte Medikamentenmenge:</p>
       </div>
+
+      <p class="disclaimer">
+        <strong>Wichtiger Hinweis:</strong> Dieser Rechner dient ausschließlich zur
+        rechnerischen Unterstützung. Er ersetzt keine ärztliche oder pharmazeutische
+        Beratung. Dosierung und Anwendung eines Medikaments müssen anhand der konkreten
+        ärztlichen Verordnung bzw. der offiziellen Fachinformation erfolgen. Bei
+        Unsicherheit bitte einen Arzt oder Apotheker konsultieren.
+      </p>
     </div>
     <script src="document.js"></script>
   </body>
