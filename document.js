@@ -1,98 +1,94 @@
 import { calculateDose } from "./calculator.js";
 
-const translations = {
+const text = {
   de: {
     title: "Medikamenten-Dosis-Rechner",
     concentration: "Konzentration (mg/ml):",
-    weightConcentration: "Gewichtskonzentration (mg/kg):",
-    patientWeight: "Gewicht Patient (kg):",
-    dosesPerDay: "Dosen/Tag:",
+    weight: "Gewichtskonzentration (mg/kg):",
+    patient: "Gewicht Patient (kg):",
+    doses: "Dosen/Tag:",
     result: "Ergebnis",
     amount: "Benötigte Medikamentenmenge:",
     dose: "Dosis/Gabe:",
-    disclaimerHeading: "Wichtiger Hinweis:",
-    disclaimer:
-      "Dieser Rechner dient ausschließlich zur rechnerischen Unterstützung. Er ersetzt keine ärztliche oder pharmazeutische Beratung. Dosierung und Anwendung eines Medikaments müssen anhand der konkreten ärztlichen Verordnung bzw. der offiziellen Fachinformation erfolgen. Bei Unsicherheit bitte einen Arzt oder Apotheker konsultieren."
+    note: "Wichtiger Hinweis:",
+    noteText: "Dieser Rechner dient ausschließlich zur rechnerischen Unterstützung. Er ersetzt keine ärztliche oder pharmazeutische Beratung. Dosierung und Anwendung eines Medikaments müssen anhand der konkreten ärztlichen Verordnung bzw. der offiziellen Fachinformation erfolgen. Bei Unsicherheit bitte einen Arzt oder Apotheker konsultieren."
   },
   en: {
     title: "Medication Dose Calculator",
     concentration: "Concentration (mg/ml):",
-    weightConcentration: "Dose by body weight (mg/kg):",
-    patientWeight: "Patient weight (kg):",
-    dosesPerDay: "Doses/day:",
+    weight: "Dose by body weight (mg/kg):",
+    patient: "Patient weight (kg):",
+    doses: "Doses/day:",
     result: "Result",
     amount: "Required medication amount:",
     dose: "Dose per administration:",
-    disclaimerHeading: "Important:",
-    disclaimer:
-      "This calculator is intended solely as a calculation aid. It does not replace medical or pharmaceutical advice. The dosage and use of a medication must always be based on the specific medical prescription or official product information. If you are unsure, consult a doctor or pharmacist."
+    note: "Important:",
+    noteText: "This calculator is intended solely as a calculation aid. It does not replace medical or pharmaceutical advice. The dosage and use of a medication must always be based on the specific medical prescription or official product information. If you are unsure, consult a doctor or pharmacist."
   }
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const concentrationInput = document.getElementById("concentration");
-  const weightConcentrationInput = document.getElementById("weight-concentration");
-  const patientWeightInput = document.getElementById("patient-weight");
-  const dosesPerDayInput = document.getElementById("doses-per-day");
-  const resultAmount = document.getElementById("result-amount");
-  const resultDose = document.getElementById("result-dose");
-  const languageButtons = document.querySelectorAll("[data-lang]");
+  const $ = (id) => document.getElementById(id);
+  const container = document.querySelector(".container");
+  const title = container.querySelector("h1");
+  const labels = {
+    concentration: container.querySelector('[for="concentration"]'),
+    weight: container.querySelector('[for="weight-concentration"]'),
+    patient: container.querySelector('[for="patient-weight"]'),
+    doses: container.querySelector('[for="doses-per-day"]')
+  };
 
-  let currentLanguage = localStorage.getItem("language");
-  if (!translations[currentLanguage]) {
-    currentLanguage = "de";
-  }
+  Object.entries(labels).forEach(([key, label]) => { label.id = `${key}-label`; });
+  title.id = "page-title";
+
+  const switcher = document.createElement("div");
+  switcher.className = "language-switch";
+  switcher.setAttribute("aria-label", "Sprache / Language");
+  switcher.innerHTML = '<button type="button" data-lang="de" aria-pressed="true">Deutsch</button><button type="button" data-lang="en" aria-pressed="false">English</button>';
+  container.insertBefore(switcher, title);
+
+  const note = container.querySelector(".disclaimer");
+  const strong = note.querySelector("strong");
+  strong.id = "disclaimer-heading";
+  const noteText = document.createElement("span");
+  noteText.id = "disclaimer-text";
+  noteText.textContent = note.textContent.replace(strong.textContent, "").trim();
+  note.replaceChildren(strong, noteText);
+
+  const inputs = [$("concentration"), $("weight-concentration"), $("patient-weight"), $("doses-per-day")];
+  const amount = $("result-amount");
+  const dose = $("result-dose");
+  const buttons = switcher.querySelectorAll("button");
+  let language = localStorage.getItem("language");
+  if (!text[language]) language = "de";
 
   function calculate() {
-    const text = translations[currentLanguage];
-    const amount = calculateDose(
-      parseFloat(concentrationInput.value),
-      parseFloat(weightConcentrationInput.value),
-      parseFloat(patientWeightInput.value)
-    );
-    const dosesPerDay = parseFloat(dosesPerDayInput.value);
-
-    resultAmount.textContent =
-      amount === null
-        ? text.amount
-        : `${text.amount} ${amount.toFixed(2)} ml/day`;
-
-    resultDose.textContent =
-      amount === null || !Number.isFinite(dosesPerDay) || dosesPerDay <= 0
-        ? text.dose
-        : `${text.dose} ${(amount / dosesPerDay).toFixed(2)} ml/dose`;
+    const t = text[language];
+    const value = calculateDose(parseFloat(inputs[0].value), parseFloat(inputs[1].value), parseFloat(inputs[2].value));
+    const count = parseFloat(inputs[3].value);
+    amount.textContent = value === null ? t.amount : `${t.amount} ${value.toFixed(2)} ${language === "de" ? "ml/Tag" : "ml/day"}`;
+    dose.textContent = value === null || !Number.isFinite(count) || count <= 0 ? t.dose : `${t.dose} ${(value / count).toFixed(2)} ${language === "de" ? "ml/Dosis" : "ml/dose"}`;
   }
 
-  function setLanguage(language) {
-    currentLanguage = language;
-    const text = translations[language];
-
+  function setLanguage(next) {
+    language = next;
+    const t = text[language];
     document.documentElement.lang = language;
-    document.title = text.title;
-    document.getElementById("page-title").textContent = text.title;
-    document.getElementById("concentration-label").textContent = text.concentration;
-    document.getElementById("weight-concentration-label").textContent = text.weightConcentration;
-    document.getElementById("patient-weight-label").textContent = text.patientWeight;
-    document.getElementById("doses-per-day-label").textContent = text.dosesPerDay;
-    document.getElementById("result-heading").textContent = text.result;
-    document.getElementById("disclaimer-heading").textContent = text.disclaimerHeading;
-    document.getElementById("disclaimer").childNodes[1].textContent = ` ${text.disclaimer}`;
-
-    languageButtons.forEach((button) => {
-      button.setAttribute("aria-pressed", String(button.dataset.lang === language));
-    });
-
+    document.title = t.title;
+    title.textContent = t.title;
+    labels.concentration.textContent = t.concentration;
+    labels.weight.textContent = t.weight;
+    labels.patient.textContent = t.patient;
+    labels.doses.textContent = t.doses;
+    $("result-heading").textContent = t.result;
+    strong.textContent = t.note;
+    noteText.textContent = ` ${t.noteText}`;
+    buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.lang === language)));
     localStorage.setItem("language", language);
     calculate();
   }
 
-  concentrationInput.addEventListener("input", calculate);
-  weightConcentrationInput.addEventListener("input", calculate);
-  patientWeightInput.addEventListener("input", calculate);
-  dosesPerDayInput.addEventListener("input", calculate);
-  languageButtons.forEach((button) => {
-    button.addEventListener("click", () => setLanguage(button.dataset.lang));
-  });
-
-  setLanguage(currentLanguage);
+  inputs.forEach((input) => input.addEventListener("input", calculate));
+  buttons.forEach((button) => button.addEventListener("click", () => setLanguage(button.dataset.lang)));
+  setLanguage(language);
 });
