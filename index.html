@@ -7,30 +7,34 @@
     <link rel="stylesheet" href="body.css" />
   </head>
   <body>
-    <div class="container">
+    <main class="container">
       <h1>Medikamenten-Dosis-Rechner</h1>
-      <label for="concentration">Konzentration (mg/ml):</label>
-      <input type="number" id="concentration" name="concentration" min="0" step="any" />
+      <form>
+        <label for="concentration">Konzentration (mg/ml):</label>
+        <input type="number" id="concentration" name="concentration" min="0" step="any" inputmode="decimal" />
 
-      <label for="weight-concentration">Gewichtskonzentration (mg/kg):</label>
-      <input
-        type="number"
-        id="weight-concentration"
-        name="weight-concentration"
-        min="0"
-        step="any"
-      />
+        <label for="weight-concentration">Gewichtskonzentration (mg/kg):</label>
+        <input
+          type="number"
+          id="weight-concentration"
+          name="weight-concentration"
+          min="0"
+          step="any"
+          inputmode="decimal"
+        />
 
-      <label for="patient-weight">Gewicht Patient (kg):</label>
-      <input type="number" id="patient-weight" name="patient-weight" min="0" step="any" />
+        <label for="patient-weight">Gewicht Patient (kg):</label>
+        <input type="number" id="patient-weight" name="patient-weight" min="0" step="any" inputmode="decimal" />
 
-      <label for="doses-per-day">Dosen/Tag:</label>
-      <input type="number" id="doses-per-day" name="doses-per-day" min="1" step="1" />
+        <label for="doses-per-day">Dosen/Tag:</label>
+        <input type="number" id="doses-per-day" name="doses-per-day" min="1" step="1" inputmode="numeric" />
+      </form>
 
-      <div class="result">
+      <section class="result" aria-labelledby="result-heading" aria-live="polite">
+        <h2 id="result-heading">Ergebnis</h2>
         <p id="result-amount">Benötigte Medikamentenmenge:</p>
         <p id="result-dose">Dosis/Gabe:</p>
-      </div>
+      </section>
 
       <p class="disclaimer">
         <strong>Wichtiger Hinweis:</strong> Dieser Rechner dient ausschließlich zur
@@ -39,7 +43,7 @@
         ärztlichen Verordnung bzw. der offiziellen Fachinformation erfolgen. Bei
         Unsicherheit bitte einen Arzt oder Apotheker konsultieren.
       </p>
-    </div>
+    </main>
     <script type="module" src="document.js"></script>
   </body>
 </html>
