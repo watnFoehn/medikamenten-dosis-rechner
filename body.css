@@ -17,6 +17,35 @@ body {
   margin: 20px auto;
 }
 
+.language-switch {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.language-switch button {
+  padding: 6px 10px;
+  border: 2px solid #555;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #111;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.language-switch button[aria-pressed="true"] {
+  font-weight: 700;
+  background-color: #111;
+  color: #fff;
+}
+
+.language-switch button:focus-visible,
+input[type="number"]:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 2px;
+}
+
 h1 {
   text-align: center;
   margin-top: 0;
@@ -44,8 +73,6 @@ input[type="number"] {
 }
 
 input[type="number"]:focus {
-  outline: 3px solid #005fcc;
-  outline-offset: 2px;
   border-color: #111;
 }
 
